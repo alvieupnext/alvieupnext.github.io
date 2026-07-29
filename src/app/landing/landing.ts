@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, signal, ViewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TRACKS } from '../tracks';
 
 @Component({
   selector: 'app-landing',
@@ -14,11 +15,7 @@ export class Landing implements OnInit, OnDestroy {
   private timer: any;
 
   // Audio signals
-  tracks = [
-    '/01 Wii Menu.mp3',
-    '/05 Mii Channel Medley.mp3',
-    '/09 Wii Shop Channel.mp3'
-  ];
+  tracks = TRACKS;
   currentTrack = signal('');
   isPlaying = signal(false);
 

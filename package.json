@@ -2,6 +2,8 @@
   "name": "alvie-portfolio",
   "version": "0.0.0",
   "scripts": {
+    "prestart": "node generate-tracks.js",
+    "prebuild": "node generate-tracks.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

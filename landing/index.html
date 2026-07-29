@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alvaro Vargas Guerrero - Portfolio</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/main.js" defer></script>
+</head>
+<body>
+
 <div class="wii-container">
   <div class="wii-grid">
     <!-- Top banner -->
@@ -14,23 +25,19 @@
 
     <!-- MP3 Player -->
     <div class="wii-channel player-channel">
-      <audio #audioPlayer [src]="currentTrack()" autoplay loop (play)="isPlaying.set(true)" (pause)="isPlaying.set(false)"></audio>
+      <audio id="audioPlayer" autoplay loop></audio>
       
       <div class="lcd-container">
         <div class="lcd-display">
-          <marquee scrollamount="4">♪ {{ getTrackName() }}</marquee>
+          <marquee id="trackName" scrollamount="4"></marquee>
         </div>
       </div>
       
       <div class="player-controls">
-        <button class="player-btn" (click)="togglePlay()">
-          @if (!isPlaying()) {
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          } @else {
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          }
+        <button id="playBtn" class="player-btn">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
-        <button class="player-btn" (click)="nextTrack()">
+        <button id="nextBtn" class="player-btn">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
         </button>
       </div>
@@ -114,7 +121,7 @@
     </a>
     
     <!-- Paper Channel -->
-    <a routerLink="/latestpaper" class="wii-channel brand-channel writing">
+    <a href="/latestpaper.html" class="wii-channel brand-channel writing">
       <div class="brand-content paper-anim-container">
         <div class="paper-icon-wrapper">
           <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40">
@@ -206,12 +213,10 @@
     </button>
     <div class="footer-time-container">
       <div class="footer-time-row">
-        <span class="footer-time">{{ currentTime() }}</span>
-        <span class="footer-ampm">{{ amPm() }}</span>
+        <span class="footer-time"></span>
+        <span class="footer-ampm"></span>
       </div>
       <div class="footer-date">
-        <img src="favicon.jpg" alt="Logo" width="20" height="20" style="border-radius: 4px; object-fit: cover; mix-blend-mode: multiply;" />
-        {{ currentDate() }}
       </div>
     </div>
     <a href="mailto:alvarovargasguerrero@hotmail.com" class="footer-btn right-btn">
@@ -223,3 +228,6 @@
     </a>
   </div>
 </div>
+
+</body>
+</html>

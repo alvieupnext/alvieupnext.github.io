@@ -255,6 +255,7 @@ a {
   overflow: hidden;
   position: relative;
   min-width: 0; /* allows shrinking below content width */
+  container-type: inline-size;
 }
 
 .lcd-container::after {
@@ -265,13 +266,21 @@ a {
   pointer-events: none;
 }
 
-.lcd-display marquee {
+.lcd-scroll-text {
   font-family: 'Courier New', Courier, monospace;
   font-size: 20px;
   font-weight: bold;
   color: #334433;
   text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
   margin-top: 2px;
+  white-space: nowrap;
+  animation: lcd-marquee 7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes lcd-marquee {
+  0% { transform: translateX(100cqi); }
+  100% { transform: translateX(-100%); }
 }
 
 .player-controls {
@@ -309,7 +318,7 @@ a {
     margin-right: 0;
     padding: 4px 12px;
   }
-  .lcd-display marquee {
+  .lcd-scroll-text {
     font-size: 16px;
   }
   .player-btn {

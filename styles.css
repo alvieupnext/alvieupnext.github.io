@@ -103,7 +103,7 @@ a {
 
 
 
-.wii-channel:hover {
+.wii-channel:not(.banner-channel):not(.player-channel):hover {
   transform: scale(1.03);
   box-shadow: 
     inset 0px -10px 15px rgba(0, 0, 0, 0.05),

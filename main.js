@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     
     if(dateEl) {
-      dateEl.innerHTML = `<img src="favicon.jpg" alt="Logo" width="20" height="20" style="border-radius: 4px; object-fit: cover; mix-blend-mode: multiply;" /> ${dayName} ${date}/${month}`;
+      dateEl.innerHTML = `<img src="/favicon.jpg" alt="Logo" width="20" height="20" style="border-radius: 4px; object-fit: cover; mix-blend-mode: multiply;" /> ${dayName} ${date}/${month}`;
     }
   }
 

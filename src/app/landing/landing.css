@@ -184,6 +184,8 @@
 
 .linkedin { background: linear-gradient(135deg, #0077b5, #005582); border-color: #0077b5; }
 .github { background: linear-gradient(135deg, #24292e, #1b1e22); border-color: #24292e; }
+.writing { background: linear-gradient(135deg, #9c27b0, #6a1b9a); border-color: #9c27b0; }
+.travel { background: linear-gradient(135deg, #009688, #00695c); border-color: #009688; }
 .scholar { background: linear-gradient(135deg, #4285F4, #2b5cb0); border-color: #4285F4; }
 .twitter { background: linear-gradient(135deg, #1da1f2, #0d7bbd); border-color: #1da1f2; }
 .orcid { background: linear-gradient(135deg, #A6CE39, #799a24); border-color: #A6CE39; }
@@ -428,4 +430,58 @@
   justify-content: center;
   align-items: center;
   padding: 3px;
+}
+
+/* Paper Channel Animation */
+.paper-icon-wrapper {
+  animation: paper-flip-fade 18s infinite;
+  animation-delay: 1s;
+  transform-style: preserve-3d;
+}
+
+@keyframes paper-flip-fade {
+  0% { transform: rotateY(0deg); opacity: 1; }
+  5% { transform: rotateY(360deg); opacity: 1; } /* Cute flip */
+  10% { transform: rotateY(360deg); opacity: 0; } /* Fade out */
+  95% { transform: rotateY(360deg); opacity: 0; } /* Wait while text scrolls */
+  100% { transform: rotateY(0deg); opacity: 1; } /* Fade back in */
+}
+
+.paper-scroll-wrapper {
+  position: absolute;
+  top: 34px; /* Centers exactly over the 40px SVG in a 100px tall channel */
+  transform: translateY(-50%);
+  left: 10px; right: 10px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  opacity: 0;
+  animation: paper-scroll-visibility 18s infinite;
+  animation-delay: 1s;
+  pointer-events: none;
+  container-type: inline-size;
+}
+
+@keyframes paper-scroll-visibility {
+  0% { opacity: 0; }
+  5% { opacity: 0; }
+  10% { opacity: 1; } /* Fade in */
+  95% { opacity: 1; } /* Stay visible for scroll */
+  100% { opacity: 0; } /* Fade out */
+}
+
+.paper-scroll-text {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  animation: marquee-scroll 18s linear infinite;
+  animation-delay: 1s; /* Sync with master clock */
+}
+
+@keyframes marquee-scroll {
+  0%, 10% { transform: translateX(100cqi); } /* Wait for flip to finish */
+  95% { transform: translateX(-100%); } /* Scroll across */
+  95.001%, 100% { transform: translateX(100cqi); } /* Snap back instantly, no tween */
 }

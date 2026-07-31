@@ -78,4 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
       audioPlayer.play().catch(e => console.log(e));
     }, 50);
   });
+
+  // Dynamic Paper Scroll Text
+  const paperScrollText = document.querySelector('.paper-scroll-text');
+  if (paperScrollText && typeof papersData !== 'undefined') {
+    const sortedPapers = [...papersData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (sortedPapers.length > 0) {
+      paperScrollText.textContent = sortedPapers[0].title;
+    }
+  }
 });

@@ -87,4 +87,144 @@ document.addEventListener('DOMContentLoaded', () => {
       paperScrollText.textContent = sortedPapers[0].title;
     }
   }
+
+  // Clear localStorage for testing (session-based or via ?reset/?clear query param)
+  try {
+    if (!sessionStorage.getItem('wii_test_cleared') || window.location.search.includes('clear') || window.location.search.includes('reset')) {
+      localStorage.clear();
+      sessionStorage.setItem('wii_test_cleared', 'true');
+    }
+  } catch(e) {
+    console.warn('Storage clear error:', e);
+  }
+
+  // Global helper for console testing
+  window.clearStorageAndReload = () => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+      location.reload();
+    } catch(e) {}
+  };
+
+  // Update Notification Banner for New Users
+  const banner = document.getElementById('wiiNotificationBanner');
+  if (banner && typeof updatesData !== 'undefined' && updatesData.length > 0) {
+    const sortedUpdates = [...updatesData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const latestUpdate = sortedUpdates[0];
+
+    const updateTime = new Date(latestUpdate.date).getTime();
+    const now = Date.now();
+    const diffMs = now - updateTime;
+    const ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const isWithinOneMonth = diffMs >= 0 && diffMs <= ONE_MONTH_MS;
+
+    const seenKey = 'wii_seen_update_' + latestUpdate.id;
+    let hasSeen = false;
+    try {
+      hasSeen = localStorage.getItem(seenKey) === 'true';
+    } catch(e) {
+      console.warn('LocalStorage not available:', e);
+    }
+
+    // Show notification every time (configured via if clause)
+    const showEveryTime = true;
+
+    if (showEveryTime || (!hasSeen && isWithinOneMonth)) {
+      const bannerMessage = document.getElementById('bannerMessage');
+      const bannerScrollContainer = document.getElementById('bannerScrollContainer');
+      const bannerCloseBtn = document.getElementById('bannerCloseBtn');
+      const bannerTextLink = document.getElementById('bannerTextLink');
+
+      const flavorTexts = [
+        "For Your Information:",
+        "This Just In:",
+        "That Just Happened:",
+        "Not that you'd asked, but:",
+        "I wanted to share that:"
+      ];
+      const flavor = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+
+      if (bannerMessage) {
+        bannerMessage.innerHTML = `<span class="banner-flavor">${flavor}</span><span class="banner-text-content">${latestUpdate.message}</span>`;
+      }
+
+      banner.style.display = 'block';
+
+      // Measure and apply scroll if text overflows the single-line container
+      function checkBannerScroll() {
+        if (!bannerScrollContainer || !bannerMessage) return;
+        bannerMessage.classList.remove('can-scroll');
+        bannerScrollContainer.classList.remove('has-overflow');
+        bannerMessage.style.removeProperty('--scroll-distance');
+        bannerMessage.style.removeProperty('--ticker-duration');
+
+        const containerWidth = bannerScrollContainer.clientWidth;
+        const textWidth = bannerMessage.scrollWidth;
+
+        if (textWidth > containerWidth) {
+          const overflow = textWidth - containerWidth;
+          const scrollDistance = overflow + 16;
+          const duration = Math.max(5, scrollDistance / 35);
+          bannerMessage.style.setProperty('--scroll-distance', `-${scrollDistance}px`);
+          bannerMessage.style.setProperty('--ticker-duration', `${duration}s`);
+          bannerMessage.classList.add('can-scroll');
+          bannerScrollContainer.classList.add('has-overflow');
+        }
+      }
+
+      setTimeout(checkBannerScroll, 60);
+      window.addEventListener('resize', checkBannerScroll);
+
+      // Fade out after 4 seconds
+      let dismissTimeout = null;
+
+      function dismissBanner() {
+        banner.classList.add('closing');
+        try {
+          localStorage.setItem(seenKey, 'true');
+        } catch(e) {}
+        setTimeout(() => {
+          banner.style.display = 'none';
+          banner.classList.remove('closing');
+        }, 350);
+      }
+
+      function startDismissTimer() {
+        clearTimeout(dismissTimeout);
+        dismissTimeout = setTimeout(() => {
+          dismissBanner();
+        }, 4000);
+      }
+
+      startDismissTimer();
+
+      // Pause 4s timer while hovered, resume when mouse leaves
+      banner.addEventListener('mouseenter', () => {
+        clearTimeout(dismissTimeout);
+      });
+
+      banner.addEventListener('mouseleave', () => {
+        startDismissTimer();
+      });
+
+      if (bannerCloseBtn) {
+        bannerCloseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          clearTimeout(dismissTimeout);
+          dismissBanner();
+        });
+      }
+
+      if (bannerTextLink) {
+        bannerTextLink.addEventListener('click', () => {
+          try {
+            localStorage.setItem(seenKey, 'true');
+          } catch(e) {}
+        });
+      }
+    }
+  }
 });
+

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stay Updated!</title>
+  <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="/updates-data.js"></script>
+</head>
+<body>
+
+<div class="page-container updates-layout">
+  
+  <div class="top-nav-bar">
+    <a href="/landing.html" class="back-btn top-back-btn">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Menu
+    </a>
+  </div>
+
+  <div class="updates-header">
+    <h1 class="updates-main-title">Stay Updated!</h1>
+  </div>
+
+  <div class="sort-controls-stylized">
+    <div class="sort-toggle" id="sortToggle" onclick="toggleSort()">
+      <div class="sort-slider"></div>
+      <button id="btnNewest" class="sort-btn active">Newest First</button>
+      <button id="btnOldest" class="sort-btn">Oldest First</button>
+    </div>
+  </div>
+
+  <div class="updates-list" id="updatesList">
+    <!-- Populated dynamically by script -->
+  </div>
+
+</div>
+
+<script>
+let currentSort = 'newest';
+
+function renderUpdates() {
+  const list = document.getElementById('updatesList');
+  list.innerHTML = '';
+  
+  if (typeof updatesData === 'undefined' || !updatesData.length) {
+    list.innerHTML = '<div class="update-card"><p class="update-empty">No updates found.</p></div>';
+    return;
+  }
+
+  const sorted = [...updatesData].sort((a, b) => {
+    const dA = new Date(a.date);
+    const dB = new Date(b.date);
+    return currentSort === 'newest' ? dB - dA : dA - dB;
+  });
+  
+  // Find chronologically newest
+  const chronologicallyNewest = [...updatesData].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+  // Mark latest update as seen when visiting the updates page
+  if (chronologicallyNewest && chronologicallyNewest.id) {
+    try {
+      localStorage.setItem('wii_seen_update_' + chronologicallyNewest.id, 'true');
+    } catch(e) {
+      console.warn('LocalStorage unavailable:', e);
+    }
+  }
+
+  sorted.forEach(update => {
+    const isLatest = update.id === chronologicallyNewest.id;
+    const card = document.createElement('div');
+    card.className = 'update-card';
+    card.setAttribute('data-date', update.date);
+
+    let tagsHtml = '';
+    if (isLatest) {
+      tagsHtml += `<span class="tag" style="background: #ffd54f; color: #b28900; margin-right: 12px;">Latest Update</span>`;
+    }
+    tagsHtml += `<span class="tag"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="vertical-align: -1px; margin-right: 4px;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>${update.displayDate}</span>`;
+
+    card.innerHTML = `
+      <div class="header">
+        ${tagsHtml}
+      </div>
+      <p class="update-message-text">${update.message}</p>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function toggleSort() {
+  currentSort = currentSort === 'newest' ? 'oldest' : 'newest';
+  
+  document.getElementById('btnNewest').classList.toggle('active', currentSort === 'newest');
+  document.getElementById('btnOldest').classList.toggle('active', currentSort === 'oldest');
+  document.getElementById('sortToggle').classList.toggle('is-oldest', currentSort === 'oldest');
+  
+  renderUpdates();
+}
+
+document.addEventListener('DOMContentLoaded', renderUpdates);
+</script>
+
+</body>
+</html>

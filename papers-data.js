@@ -1,6 +1,6 @@
 const papersData = [
   {
-    title: "A Systematic Review of Federated Structure Learning: Definitions and Methods",
+    title: "A Systematic Review of Federated Causal Discovery: Definitions and Methods",
     date: "2026-07-15",
     displayDate: "15 July 2026",
     abstract: "The paper provides a PRISMA-guided systematic review of Federated Structure Learning (FSL), which encompasses Federated Causal Discovery (FCD) and Federated Bayesian Network Structure Learning (FBNSL). It identifies and categorizes 31 algorithmic contributions, highlighting challenges such as high-dimensional scalability, heterogeneous data fusion, and the integration of cryptographic privacy guarantees.",

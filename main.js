@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(checkBannerScroll, 60);
       window.addEventListener('resize', checkBannerScroll);
 
-      // Fade out after 4 seconds
+      // Fade out after 6 seconds
       let dismissTimeout = null;
 
       function dismissBanner() {
@@ -194,12 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(dismissTimeout);
         dismissTimeout = setTimeout(() => {
           dismissBanner();
-        }, 4000);
+        }, 6000);
       }
 
       startDismissTimer();
 
-      // Pause 4s timer while hovered, resume when mouse leaves
+      // Pause 6s timer while hovered, resume when mouse leaves
       banner.addEventListener('mouseenter', () => {
         clearTimeout(dismissTimeout);
       });
